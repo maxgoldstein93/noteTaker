@@ -2,6 +2,7 @@ const path = require("path")
 const express = require('express');
 const fs = require("fs");
 const db =require("./db/db.json");
+const util = require("util")
 
 
 const app = express()
@@ -13,27 +14,30 @@ app.use(express.json());
 
 
 
-// API Routes
+
+
+// // API Routes
 
 // Get /api/notes
 app.get("/api/notes", function(req, res) {
-  return res.json(db);
+  res.json(db);
 });
-// get data from db.json
-// return res.json(data);
 
+app.post("/api/notes", function(req, res) {
+  // req.body hosts is equal to the JSON post sent from the user
+  // This works because of our body parsing middleware
+  var newNote = req.body;
+  console.log(db);
+  db.push(newNote);
+  fs.writeFile("./db/db.json",JSON.stringify(db, null, 2),err => {
+    if (err) throw err;
+    return true;
+  });
+  res.json(db);
+});
 
-// fs.readFile("./db/db.json", "utf8", function (err, data){
-//   console.log(data)
-// })
 // post api/notes
 // receive json obj from front end
-
-app.post("/api/tables", function(req, res) {
-    db.push(req.body);
-     return res.json(true);
- 
-});
 // writefile
 // return res.status(200).end()
 
