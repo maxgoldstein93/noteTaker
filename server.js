@@ -7,7 +7,8 @@ let db = require("./db/db.json");
 
 const app = express()
 
-const PORT = 3636
+const PORT = process.env.PORT || 3636;
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
