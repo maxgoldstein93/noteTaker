@@ -44,9 +44,9 @@ app.delete("/api/notes/:id", function(req, res) {
   
   fs.writeFile("./db/db.json", JSON.stringify(db, "utf8", null, 2), err => {
         if (err) throw err;
-        res.json(db);
+      
       });
-      // res.json(db);
+      res.json(db);
   
   console.log("Deleted note with id "+req.params.id);
 });
