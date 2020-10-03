@@ -5,6 +5,7 @@ let db = require("./db/db.json");
 
 
 
+
 const app = express()
 
 const PORT = process.env.PORT || 3636;
@@ -23,10 +24,8 @@ app.use(express.json());
 app.get("/api/notes", function (req, res) {
   res.json(db);
 });
-
+// Post /api/notes
 app.post("/api/notes", function (req, res) {
-  // req.body hosts is equal to the JSON post sent from the user
-  // This works because of our body parsing middleware
   var newNote = req.body;
   newNote.id = db.length
   console.log(db);
@@ -38,28 +37,20 @@ app.post("/api/notes", function (req, res) {
 
 });
 
-// delete api/notes/:id
 
-// I COULD NOT GET THE APP.Delete to work //
-// ==============================================
-app.delete('/api/notes/:id', function (req, res) {
-  var updatedNote = req.params.id
-  var newNotes = []
-  for (let i = 0; i <= db.length; i++) {
-    if (updatedNote !== db[i].id) {
-      newNotes.push(db[i]);
-
-
-    }
-  }
-  db = newNotes;
+// Delete /api/notes  // working with a bug...
+app.delete("/api/notes/:id", function(req, res) {
+  db.splice(req.params.id, 1 );
+  
   fs.writeFile("./db/db.json", JSON.stringify(db, "utf8", null, 2), err => {
-    if (err) throw err;
+        if (err) throw err;
+        res.json(db);
+      });
+      // res.json(db);
+  
+  console.log("Deleted note with id "+req.params.id);
+});
 
-  });
-  res.json(db);
-
-})
 
 // HTML Routes
 
